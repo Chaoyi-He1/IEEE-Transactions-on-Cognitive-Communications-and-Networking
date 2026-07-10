@@ -331,7 +331,7 @@ T2F CNN        & 17M & 1D Conv \\
 
 \section{RESULTS}
 \subsection{Encoder (LSE) Model Evaluation}
-In this work, we employ a contrastive learning method that enables our prediction system to operate effectively across a wide range of wireless communication environments. Unlike previous state-of-the-art spectrum prediction models focusing on specific frequency bands or static environments, our encoder adaptively compresses and extracts features from diverse and dynamic signal environments. This flexibility suggests that the model may generalise to new wireless environments with limited or no retraining, a property that warrants explicit zero-shot and few-shot evaluation in future work \cite{result_ref1, result_ref2, result_ref3}.
+In this work, we employ a contrastive learning method that enables our prediction system to operate effectively across a wide range of wireless communication environments. Unlike previous state-of-the-art spectrum prediction models focusing on specific frequency bands or static environments, our encoder adaptively compresses and extracts features from diverse and dynamic signal environments. This flexibility suggests that the model may generalise to new wireless environments with limited or no retraining, a property that we examine directly through the zero-shot transfer experiment reported in Section~\ref{sec:zeroshot}; few-shot adaptation remains a direction for future work \cite{result_ref1, result_ref2, result_ref3}.
 
 Our investigation into the Latent Space Extractor (LSE) leverages a contrastive learning technique inspired by Contrastive Predictive Coding (CPC) \cite{model_ref1}, a method renowned for its ability to create efficient data representations. We explore the LSE's performance across various parameter settings, particularly how different historical signal intervals and latent space dimensions impact the model's precision and efficiency.
 
@@ -382,7 +382,7 @@ The convolution layer’s intrinsic architectural advantages in processing the c
 
 CNN's proficiency in analyzing temporal signals, its computational efficiency compared to transformer architectures, and its alignment with the specific characteristics of wireless signal data firmly establish it as the optimal architecture for future spectrum utilization predictions.
 
-\subsection{System Evaluation}
+\subsection{System Evaluation}\label{sec:sys_eval}
 Our evaluation was conducted using an extensive dataset of wireless signal recordings, encompassing a wide range of environmental conditions and usage scenarios, as detailed in Section \ref{sec:data}. The model's performance was assessed through various metrics, including prediction accuracy, F1 score (aided by the T2F model), and the receiver operating characteristic (ROC) curve.
 
 \begin{figure}[!t]
@@ -443,6 +443,33 @@ Work & Method & \makecell{Input Format} & \makecell{Historical\\ Duration} & \ma
 
 \end{tabular}
 \end{table*}
+
+\subsection{Zero-Shot Transfer to Unseen Environments}\label{sec:zeroshot}
+
+The system-level results reported above draw the training and validation data from the same 30 simulated environments. To examine how the framework behaves when the generative stage encounters propagation environments that were never part of its training set, we retrain the diffusion model using only environments 1--20 and hold out environments 21--30 entirely. The architecture, diffusion schedule, and training configuration are identical to those of the original model. The encoder and the T2F classifier are reused unchanged from the full-training configuration, so that this experiment isolates the transfer behavior of the diffusion stage.
+
+Evaluation on the ten held-out environments follows the same inference procedure as Fig.~\ref{fig_inference} and the same ROC methodology as Fig.~\ref{fig_res6}: for each input history, 20 future signals are sampled under the same latent condition $z_t$, each generated signal is classified by the T2F model, a majority vote across the samples finalizes the occupancy decision for each frequency sub-block, and the ROC curve is traced by sweeping the confidence threshold. Table~\ref{tab:zeroshot} lists the resulting AUC for each held-out environment. The system attains an overall AUC of 0.7589 on environments never seen by the diffusion model, compared with 0.8388 when all 30 environments are included in training (Section~\ref{sec:sys_eval}), and the F1 score at the fixed 0.5 threshold is 0.87.
+
+The moderate reduction in AUC indicates that a substantial portion of the system-level sub-channel occupancy classification performance is retained when the generative stage operates outside its training distribution. This behavior is consistent with the cross-environment generalization goal of the contrastive representation discussed at the beginning of this section. Few-shot adaptation of the encoder and classifier to new environments remains a natural extension for future work.
+
+\begin{table}[!t]
+\centering
+\caption{Zero-Shot System-Level AUC on Held-Out Environments
+\label{tab:zeroshot}}
+\begin{tabular}{cc|cc}
+\hline
+Environment & AUC & Environment & AUC \\
+\hline
+21 & 0.7188 & 26 & 0.6762 \\
+22 & 0.8244 & 27 & 0.8982 \\
+23 & 0.7171 & 28 & 0.7400 \\
+24 & 0.7595 & 29 & 0.8048 \\
+25 & 0.8179 & 30 & 0.7371 \\
+\hline
+\multicolumn{2}{c|}{Overall} & \multicolumn{2}{c}{\textbf{0.7589}} \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Discussion}
 The central contribution of this work is enabling devices that traditionally require separate frequency bands — such as radar, satellite links, and IoT sensors — to coexist within the same band as WiFi by exploiting subchannel-level vacancies in real time.
