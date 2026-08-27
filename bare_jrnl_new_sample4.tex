@@ -27,7 +27,7 @@
 
 \title{Stochastic Spectrum Prediction via Diffusion Probabilistic Models and Representation Learning}
 
-\author{Chaoyi He, Arya Menon, Linda P.B. Katehi$^*$,
+\author{Chaoyi He, Arya Menon, Jacdon Green, Linda P.B. Katehi$^*$,
 \\ Department of Electrical \& Computer Engineering, 
 \\ Texas A\&M University, 
 \\ College Station, TX, USA
@@ -415,6 +415,93 @@ Our model provides frame-by-frame predictions, in contrast to previous models, w
 
 We compare our work with previous AI-based spectrum prediction methods in Table \ref{tab:compare1} and find that previous approaches suffer from low time or frequency resolution, limited ability to model dynamic user behavior, and an inability to predict events such as users leaving or joining a communication channel. In contrast, our model effectively addresses these issues, offering predictions across multiple time slots with high temporal and frequency granularity. Using signal waveforms as input, our approach successfully captures the probabilistic features of queue networks, enabling precise modeling of user transitions. 
 
+\begin{table*}[ht]
+\centering
+\caption{\red{Stage Ablations - all evaluated on the same validation split and 32-frame horizon.}}
+\label{tab:comparison}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
+\hline
+\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
+\hline
+
+Persistence (repeat frame 0)
+  & \textit{none} & {[XX]} & {[XX]} & {[XX]\%} & {[XX] $\mu$s} \\
+\hline
+
+Encoder $\rightarrow$ CNN, direct label regression
+  & \textit{removed} & {[XX]} & {[XX]} & {[XX]\%} & {[XX] \ul{ms}} \\
+\hline
+
+Encoder $\rightarrow$ diffusion $\rightarrow$ T2F, 1 sample
+  & full & {[XX]} & {[XX]} & {[XX]\%} & {[XX] \ul{ms}} \\
+\hline
+
+Encoder $\rightarrow$ diffusion $\rightarrow$ T2F, 5 samples
+  & full & {[XX]} & {[XX]} & {[XX]\%} & {[XX] \ul{ms}} \\
+\hline
+
+\textbf{Proposed (20 samples, majority vote)}
+  & \textbf{full} & \textbf{0.8388} & \textbf{[XX]} & \textbf{[XX]\%} & \textbf{[XX] \ul{ms}} \\
+\hline
+
+Proposed, zero-shot (Sec. V-E)
+  & full & 0.7589 & {[XX]} & {[XX]\%} & {[XX] \ul{ms}} \\
+\hline
+
+\textit{T2F on ground-truth waveforms (upper bound)}
+  & \textit{oracle} & \textit{[XX]} & \textit{[XX]} & \textit{[XX]\%} & --- \\
+\hline
+
+\end{tabular}%
+}
+\end{table*}
+
+
+
+
+\begin{table}[ht]
+\centering
+\caption{\red{Design ablation study.}}
+\label{tab:ablation}
+\begin{tabular}{|>{\centering\arraybackslash}m{1.8cm}|>{\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{1.0cm}|>{\centering\arraybackslash}m{1.2cm}|}
+\hline
+\textbf{Ablation} & \textbf{Setting compared} & \textbf{AUC} & \textbf{$\Delta$ AUC} \\
+\hline
+
+Encoder kernels
+  & causal vs. centered & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+History length \ul{T\_hst}
+  & 64 / 128 / 256 frames & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+Latent dimension
+  & 64 / 128 / 256 & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+Fine-tuning weight (Eq. 7)
+  & 0.1 vs. 1.0 & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+Sampler
+  & DDPM (N steps) vs. DDIM (k steps) & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+Ensemble aggregation
+  & majority vote vs. mean probability & {[XX]} & {[$\pm$XX]} \\
+\hline
+
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
 \begin{table*}[!t]
 \centering
 \caption{Comparison with other works $^1$
@@ -541,7 +628,7 @@ This paper presents a deep neural network framework that enables simultaneous sp
 %  (used to reserve space for the reference number labels box).
 
 \section*{Acknowledgment}
-The authors wish to thank Mr. Yi Huang at the University of Massachusetts, Amherst, for providing critical comments during the development of this manuscript. The authors received no external funding for this work.
+The authors would like to thank the Intelligent Electromagnetic Sensor Laboratories (iEMSL) at Texas A\&M University for providing access to facilities and resources that supported this research. The authors also wish to thank Mr. Yi Huang at the University of Massachusetts, Amherst, for providing critical comments during the development of this manuscript as well as Sanjay Patel and Mariea Sharaf Anzum of Texas A\&M University for their assistance with measurements. The authors received no external funding for this work.
 
 \begin{thebibliography}{1}
 \bibliographystyle{IEEEtran}
