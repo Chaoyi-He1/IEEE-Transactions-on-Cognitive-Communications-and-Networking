@@ -418,40 +418,40 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 
 \begin{table*}[ht]
 \centering
-\caption{Stage ablations. Every row is evaluated on the same validation draw (60 windows per environment, seed 42, $N{=}1800$) over the 32-frame horizon, scoring each sub-block by the sample-averaged classifier confidence. AP is average precision; its no-skill floor equals the occupied-class base rate of 0.777. Vacancy det.\ @ 1\% collision is the fraction of genuinely vacant sub-blocks identified when the decision threshold is set so that 1\% of occupied sub-blocks are declared vacant. Latency is the median single-inference wall clock on one NVIDIA A100; the direct-regression head is a 4.7M-parameter network on the frozen encoder context. Under this common protocol the full system measures an AUC of 0.7612 and the zero-shot configuration 0.7491; these differ from the values quoted in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot}, whose original evaluation windows are not recoverable. The persistence baseline saturates because occupancy dwell times far exceed the 410~$\mu$s prediction horizon.}
+\caption{Stage ablations. Every row is evaluated on the same validation draw (60 windows per environment, seed 42, $N{=}1800$) over the 32-frame horizon, scoring each sub-block by the sample-averaged classifier confidence. The AUC (transition) column evaluates the identical configurations on the 135 windows of the corpus whose 32-frame future contains at least one occupancy flip (occupied base rate 0.690; bootstrap standard error $\approx 0.01$): persistence ceases to saturate there, and no learned configuration exceeds it beyond statistical noise. AP is average precision on the random draw; its no-skill floor equals the occupied-class base rate of 0.777. Vacancy det.\ @ 1\% collision is the fraction of genuinely vacant sub-blocks identified when the decision threshold is set so that 1\% of occupied sub-blocks are declared vacant. Latency is the median single-inference wall clock on one NVIDIA A100; the direct-regression head is a 4.7M-parameter network on the frozen encoder context. Under this common protocol the full system measures an AUC of 0.7612 and the zero-shot configuration 0.7491; these differ from the values quoted in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot}, whose original evaluation windows are not recoverable. The persistence baseline saturates on the random draw because occupancy dwell times far exceed the 410~$\mu$s prediction horizon.}
 \label{tab:comparison}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|p{3.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
+\begin{tabular}{|p{3.2cm}|p{1.8cm}|p{1.3cm}|p{1.5cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
 \hline
-\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
+\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC (random)} & \textbf{AUC (transition)} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
 \hline
 
 Persistence (repeat frame 0)
-  & \textit{none} & 1.0000 & 1.0000 & 100.0\% & $<1$ $\mu$s \\
+  & \textit{none} & 1.0000 & 0.8323 & 1.0000 & 100.0\% & $<1$ $\mu$s \\
 \hline
 
 Encoder $\rightarrow$ CNN, direct label regression
-  & \textit{removed} & 0.7789 & 0.9295 & 3.2\% & 19.5 \ul{ms} \\
+  & \textit{removed} & 0.7789 & 0.8382 & 0.9295 & 3.2\% & 19.5 \ul{ms} \\
 \hline
 
 Encoder $\rightarrow$ diffusion $\rightarrow$ T2F, 1 sample
-  & full & 0.7449 & 0.9204 & 1.8\% & 457 \ul{ms} \\
+  & full & 0.7449 & 0.8036 & 0.9204 & 1.8\% & 457 \ul{ms} \\
 \hline
 
 Encoder $\rightarrow$ diffusion $\rightarrow$ T2F, 5 samples
-  & full & 0.7570 & 0.9200 & 2.1\% & 1979 \ul{ms} \\
+  & full & 0.7570 & 0.7966 & 0.9200 & 2.1\% & 1979 \ul{ms} \\
 \hline
 
 \textbf{Proposed (20 samples, ensemble mean)}
-  & \textbf{full} & \textbf{0.7612} & \textbf{0.9250} & \textbf{1.8\%} & \textbf{8025 \ul{ms}} \\
+  & \textbf{full} & \textbf{0.7612} & \textbf{0.8185} & \textbf{0.9250} & \textbf{1.8\%} & \textbf{8025 \ul{ms}} \\
 \hline
 
 Proposed, zero-shot (Sec. V-E)
-  & full & 0.7491 & 0.9169 & 1.8\% & 8079 \ul{ms} \\
+  & full & 0.7491 & 0.8004 & 0.9169 & 1.8\% & 8079 \ul{ms} \\
 \hline
 
 \textit{T2F on ground-truth waveforms (upper bound)}
-  & \textit{oracle} & \textit{0.9855} & \textit{0.9780} & \textit{98.3\%} & --- \\
+  & \textit{oracle} & \textit{0.9855} & \textit{0.8967} & \textit{0.9780} & \textit{98.3\%} & --- \\
 \hline
 
 \end{tabular}%
