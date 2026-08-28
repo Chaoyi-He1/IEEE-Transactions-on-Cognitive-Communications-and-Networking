@@ -420,7 +420,7 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 
 \begin{table*}[ht]
 \centering
-\caption{Stage ablations on the 135 validation windows whose 32-frame future contains an occupancy flip (seed 42; occupied base rate 0.690; bootstrap standard errors $\approx 0.01$). Transition-free windows ($>$99\% of the corpus) are excluded because there the persistence baseline reproduces the future exactly by construction; the values in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot} refer to randomly drawn windows and are not comparable. Sensed persistence replaces the oracle's label access with the T2F classifier applied to the 128 history frames; the state-conditioned variant appends that 8-dimensional estimate to the diffusion context (30-epoch adaptation of the diffusion stage only); the fusion row takes the geometric mean of the proposed system's ensemble confidence and the sensed estimate, exceeding sensed persistence by $+0.034 \pm 0.008$ AUC and $+0.044 \pm 0.007$ AP ($P>0.999$), while a fusion built on the direct-regression head instead reaches an indistinguishable 0.8861 at far lower latency. AP: average precision (no-skill floor 0.690). Vacancy det.: fraction of vacant sub-blocks identified at the threshold that declares 1\% of occupied sub-blocks vacant. Latency: median single inference on one NVIDIA A100.}
+\caption{Stage ablations on the 135 validation windows whose 32-frame future contains an occupancy flip (seed 42; occupied base rate 0.690; bootstrap standard errors $\approx 0.01$). Transition-free windows ($>$99\% of the corpus) are excluded because there any persistence-style predictor is nearly exact (T2F-sensed persistence reaches 0.99 AUC, and copying ground-truth history labels is exact by construction; on the transition windows the latter scores 0.8323); the values in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot} refer to randomly drawn windows and are not comparable. The two sensed-persistence rows copy forward a per-sub-block occupancy estimate obtained from the 128 history frames, by an FFT band-power detector or by the T2F classifier; the state-conditioned variant appends that 8-dimensional estimate to the diffusion context (30-epoch adaptation of the diffusion stage only); the fusion row takes the geometric mean of the proposed system's ensemble confidence and the sensed estimate, exceeding sensed persistence by $+0.034 \pm 0.008$ AUC and $+0.044 \pm 0.007$ AP ($P>0.999$), while a fusion built on the direct-regression head instead reaches an indistinguishable 0.8861 at far lower latency. AP: average precision (no-skill floor 0.690). Vacancy det.: fraction of vacant sub-blocks identified at the threshold that declares 1\% of occupied sub-blocks vacant. Latency: median single inference on one NVIDIA A100.}
 \label{tab:comparison}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|p{3.4cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
@@ -428,8 +428,8 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 \textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
 \hline
 
-Persistence (oracle: ground-truth history labels)
-  & \textit{none} & 0.8323 & 0.8796 & 4.7\% & $<1$ $\mu$s \\
+Sensed persistence (FFT energy detector)
+  & \textit{none} & 0.8156 & 0.9039 & 6.6\% & 2.3 \ul{ms} \\
 \hline
 
 Sensed persistence (T2F on history)
