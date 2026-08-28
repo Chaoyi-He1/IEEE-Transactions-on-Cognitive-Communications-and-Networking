@@ -418,7 +418,7 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 
 \begin{table*}[ht]
 \centering
-\caption{Stage ablations under the transition-window protocol: every row is evaluated on the 135 validation windows whose 32-frame future contains at least one occupancy flip (seed 42; occupied-class base rate 0.690; bootstrap standard errors $\approx 0.01$ for AUC and AP). Randomly drawn windows are excluded because occupancy dwell times far exceed the 410~$\mu$s horizon, so on the transition-free remainder of the corpus ($>$99\% of windows) the persistence baseline reproduces the future exactly by construction and no predictor can improve on it; the values quoted in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot} refer to randomly drawn windows and are not comparable to this protocol. On the transition windows, the AUC differences among persistence, direct regression, and the proposed system lie within statistical noise, while the proposed system attains a higher average precision than persistence ($+0.038 \pm 0.008$). AP is average precision (no-skill floor = 0.690). Vacancy det.\ @ 1\% collision is the fraction of genuinely vacant sub-blocks identified when the decision threshold is set so that 1\% of occupied sub-blocks are declared vacant. Latency is the median single-inference wall clock on one NVIDIA A100; the direct-regression head is a 4.7M-parameter network on the frozen encoder context. Zero-shot AP and vacancy scores were not retained for this protocol. The oracle row bounds the performance a perfect future waveform would allow.}
+\caption{Stage ablations under the transition-window protocol: every row is evaluated on the 135 validation windows whose 32-frame future contains at least one occupancy flip (seed 42; occupied-class base rate 0.690; bootstrap standard errors $\approx 0.01$ for AUC and AP). Randomly drawn windows are excluded because occupancy dwell times far exceed the 410~$\mu$s horizon, so on the transition-free remainder of the corpus ($>$99\% of windows) the persistence baseline reproduces the future exactly by construction and no predictor can improve on it; the values quoted in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot} refer to randomly drawn windows and are not comparable to this protocol. The two sensed-persistence rows replace the oracle's label access with a deployable sensing front end applied to the 128 history frames — an FFT band-power detector, or the T2F classifier itself — whose per-bin estimate is copied forward. On these windows, T2F-sensed persistence attains the highest AUC and vacancy detection among non-oracle rows, while the direct-regression head and the proposed system attain the highest average precision; the proposed system's AP exceeds that of oracle-sensing persistence by $+0.038 \pm 0.008$, and the remaining pairwise differences lie at or within the noise level (bootstrap standard errors 0.01--0.02). AP is average precision (no-skill floor = 0.690). Vacancy det.\ @ 1\% collision is the fraction of genuinely vacant sub-blocks identified when the decision threshold is set so that 1\% of occupied sub-blocks are declared vacant. Latency is the median single-inference wall clock on one NVIDIA A100; the direct-regression head is a 4.7M-parameter network on the frozen encoder context. Zero-shot AP and vacancy scores were not retained for this protocol. The oracle row bounds the performance a perfect future waveform would allow.}
 \label{tab:comparison}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|p{3.2cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
@@ -426,8 +426,16 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 \textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
 \hline
 
-Persistence (repeat frame 0)
+Persistence (oracle sensing: ground-truth history labels)
   & \textit{none} & 0.8323 & 0.8796 & 4.7\% & $<1$ $\mu$s \\
+\hline
+
+Sensed persistence (FFT energy detector)
+  & \textit{none} & 0.8156 & 0.9039 & 6.6\% & 2.3 \ul{ms} \\
+\hline
+
+Sensed persistence (T2F on history)
+  & \textit{none} & 0.8499 & 0.9031 & 12.8\% & 43.3 \ul{ms} \\
 \hline
 
 Encoder $\rightarrow$ CNN, direct label regression
