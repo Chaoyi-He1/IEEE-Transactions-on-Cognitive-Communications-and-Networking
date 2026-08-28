@@ -422,25 +422,42 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 \centering
 \caption{Stage ablations on the 135 validation windows whose 32-frame future contains an occupancy flip (seed 42; occupied base rate 0.690; bootstrap standard errors $\approx 0.01$). Transition-free windows ($>$99\% of the corpus) are excluded because there the persistence baseline reproduces the future exactly by construction; the values in Sections~\ref{sec:sys_eval} and~\ref{sec:zeroshot} refer to randomly drawn windows and are not comparable. Sensed persistence replaces the oracle's label access with the T2F classifier applied to the 128 history frames; the state-conditioned variant appends that 8-dimensional estimate to the diffusion context (30-epoch adaptation of the diffusion stage only); the fusion row takes the geometric mean of the proposed system's ensemble confidence and the sensed estimate, exceeding sensed persistence by $+0.034 \pm 0.008$ AUC and $+0.044 \pm 0.007$ AP ($P>0.999$), while a fusion built on the direct-regression head instead reaches an indistinguishable 0.8861 at far lower latency. AP: average precision (no-skill floor 0.690). Vacancy det.: fraction of vacant sub-blocks identified at the threshold that declares 1\% of occupied sub-blocks vacant. Latency: median single inference on one NVIDIA A100.}
 \label{tab:comparison}
-\begin{tabular}{|l|c|c|c|c|}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|p{3.4cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
 \hline
-\textbf{Configuration} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency} \\
+\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
 \hline
-Persistence (oracle: ground-truth history labels) & 0.8323 & 0.8796 & 4.7\% & $<1$ $\mu$s \\
+
+Persistence (oracle: ground-truth history labels)
+  & \textit{none} & 0.8323 & 0.8796 & 4.7\% & $<1$ $\mu$s \\
 \hline
-Sensed persistence (T2F on history) & 0.8499 & 0.9031 & 12.8\% & 43 \ul{ms} \\
+
+Sensed persistence (T2F on history)
+  & \textit{none} & 0.8499 & 0.9031 & 12.8\% & 43 \ul{ms} \\
 \hline
-Direct label regression (no diffusion; 4.7M-parameter head) & 0.8382 & 0.9237 & 5.7\% & 20 \ul{ms} \\
+
+Encoder $\rightarrow$ CNN, direct label regression
+  & \textit{removed} & 0.8382 & 0.9237 & 5.7\% & 20 \ul{ms} \\
 \hline
-Proposed (20 samples, ensemble mean) & 0.8185 & 0.9174 & 6.0\% & 8025 \ul{ms} \\
+
+Proposed (20 samples, ensemble mean)
+  & full & 0.8185 & 0.9174 & 6.0\% & 8025 \ul{ms} \\
 \hline
-Proposed, state-conditioned diffusion & 0.8301 & 0.9233 & 2.9\% & 8068 \ul{ms} \\
+
+Proposed, state-conditioned diffusion
+  & full & 0.8301 & 0.9233 & 2.9\% & 8068 \ul{ms} \\
 \hline
-\textbf{Proposed $\oplus$ sensed state (fusion)} & \textbf{0.8844} & \textbf{0.9473} & \textbf{12.8\%} & \textbf{8068 \ul{ms}} \\
+
+\textbf{Proposed $\oplus$ sensed state (fusion)}
+  & \textbf{full} & \textbf{0.8844} & \textbf{0.9473} & \textbf{12.8\%} & \textbf{8068 \ul{ms}} \\
 \hline
-\textit{Oracle: T2F on ground-truth waveforms} & \textit{0.8967} & \textit{0.9146} & \textit{25.9\%} & --- \\
+
+\textit{T2F on ground-truth waveforms (upper bound)}
+  & \textit{oracle} & \textit{0.8967} & \textit{0.9146} & \textit{25.9\%} & --- \\
 \hline
-\end{tabular}
+
+\end{tabular}%
+}
 \end{table*}
 
 
