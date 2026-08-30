@@ -426,40 +426,40 @@ We compare our work with previous AI-based spectrum prediction methods in Table 
 
 \begin{table*}[ht]
 \centering
-\caption{Stage ablations on the 135 validation windows whose 32-frame future contains an occupancy flip (seed 42; occupied base rate 0.690; bootstrap standard errors $\approx 0.01$). Configurations are defined in Section~\ref{sec:sys_eval}. AP: average precision (no-skill floor 0.690). Vacancy det.: fraction of vacant sub-blocks identified at the threshold that declares 1\% of occupied sub-blocks vacant. Latency: median single-window inference on one NVIDIA A100 with the 20 ensemble members generated as one batch.}
+\caption{Stage ablations on the 135 validation windows whose 32-frame future contains an occupancy flip (seed 42; occupied base rate 0.690; bootstrap standard errors $\approx 0.01$). Configurations are defined in Section~\ref{sec:sys_eval}. AP: average precision (no-skill floor 0.690). Vacancy det.: fraction of vacant sub-blocks identified at the threshold that declares 1\% of occupied sub-blocks vacant.}
 \label{tab:comparison}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|p{3.4cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|p{2.5cm}|}
+\begin{tabular}{|p{3.4cm}|p{1.8cm}|p{1.2cm}|p{1.2cm}|p{2.8cm}|}
 \hline
-\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} & \textbf{Latency / inference} \\
+\textbf{Configuration} & \textbf{Generative stage} & \textbf{AUC} & \textbf{AP} & \textbf{Vacancy det. @ 1\% collision} \\
 \hline
 
 Sensed persistence (FFT energy detector)
-  & \textit{none} & 0.8156 & 0.9039 & 6.6\% & 2.3 \ul{ms} \\
+  & \textit{none} & 0.8156 & 0.9039 & 6.6\% \\
 \hline
 
 Sensed persistence (T2F on history)
-  & \textit{none} & 0.8499 & 0.9031 & 12.8\% & 10 \ul{ms} \\
+  & \textit{none} & 0.8499 & 0.9031 & 12.8\% \\
 \hline
 
 Encoder $\rightarrow$ CNN, direct label regression
-  & \textit{removed} & 0.8382 & 0.9237 & 5.7\% & 43 \ul{ms} \\
+  & \textit{removed} & 0.8382 & 0.9237 & 5.7\% \\
 \hline
 
 Proposed (20 samples, ensemble mean)
-  & full & 0.8185 & 0.9174 & 6.0\% & 410 \ul{ms} \\
+  & full & 0.8185 & 0.9174 & 6.0\% \\
 \hline
 
 Proposed, state-conditioned diffusion
-  & full & 0.8301 & 0.9233 & 2.9\% & 412 \ul{ms} \\
+  & full & 0.8301 & 0.9233 & 2.9\% \\
 \hline
 
 \textbf{Proposed $\oplus$ sensed state (fusion)}
-  & \textbf{full} & \textbf{0.8844} & \textbf{0.9473} & \textbf{12.8\%} & \textbf{417 \ul{ms}} \\
+  & \textbf{full} & \textbf{0.8844} & \textbf{0.9473} & \textbf{12.8\%} \\
 \hline
 
 \textit{T2F on ground-truth waveforms (upper bound)}
-  & \textit{oracle} & \textit{0.8967} & \textit{0.9146} & \textit{25.9\%} & --- \\
+  & \textit{oracle} & \textit{0.8967} & \textit{0.9146} & \textit{25.9\%} \\
 \hline
 
 \end{tabular}%
@@ -552,7 +552,7 @@ Environment & AUC & Environment & AUC \\
 \section{Discussion}
 The central contribution of this work is enabling devices that traditionally require separate frequency bands — such as radar, satellite links, and IoT sensors — to coexist within the same band as WiFi by exploiting subchannel-level vacancies in real time.
 
-The key enabler is temporal resolution. By predicting occupancy at the individual OFDM frame level (approximately 13~$\mu$s), the model can in principle anticipate subchannel availability before a WiFi transmission ends. Practical deployment, however, requires that the end-to-end inference pipeline — including encoder, diffusion sampling, and T2F classification — completes within this time budget, which has not yet been demonstrated on embedded hardware and represents an important avenue for future work. A first-order projection from the measured 410~ms batched inference (Table~\ref{tab:comparison}) — combining few-step sampling, compiler-level optimization, incremental encoding of the history, an order-of-magnitude reduction in model scale, and dedicated hardware — places the latency at roughly 0.1--0.5~ms, comparable to the 410~$\mu$s prediction window; this projection remains to be demonstrated. This allows secondary devices to begin transmitting in vacant subchannels almost immediately, rather than waiting for the entire band to be released and reassigned — directly reducing idle spectrum and increasing overall spectral efficiency. This anticipatory capability fundamentally distinguishes our approach from conventional spectrum sensing, which can only observe current conditions.
+The key enabler is temporal resolution. By predicting occupancy at the individual OFDM frame level (approximately 13~$\mu$s), the model can in principle anticipate subchannel availability before a WiFi transmission ends. Practical deployment, however, requires that the end-to-end inference pipeline — including encoder, diffusion sampling, and T2F classification — completes within this time budget, which has not yet been demonstrated on embedded hardware and represents an important avenue for future work. A first-order projection — combining few-step sampling, compiler-level optimization, incremental encoding of the history, an order-of-magnitude reduction in model scale, and dedicated hardware — places the inference latency on the order of the 32-frame prediction window; this projection remains to be demonstrated. This allows secondary devices to begin transmitting in vacant subchannels almost immediately, rather than waiting for the entire band to be released and reassigned — directly reducing idle spectrum and increasing overall spectral efficiency. This anticipatory capability fundamentally distinguishes our approach from conventional spectrum sensing, which can only observe current conditions.
 
 The diffusion model's probabilistic nature is well suited to this task because user arrivals and departures are inherently stochastic. Rather than producing a single deterministic forecast, the model generates multiple plausible future signals whose classifier confidences are aggregated. The ablations of Table~\ref{tab:comparison} locate where this generation earns its cost: on their own the sampled futures do not outperform a sensed estimate of the current occupancy, but fused with that estimate they approach the oracle bound on the windows where occupancy changes, indicating that the generative stage contributes information about impending transitions that is complementary to sensing. The contrastive-learning-based encoder is designed to generalize across diverse wireless environments by learning environment-agnostic representations. In this work, generalization is evaluated across the 30 simulated scenarios; transfer to real-world deployments with hardware impairments, unknown interference sources, or different air interface standards remains to be validated.
 
