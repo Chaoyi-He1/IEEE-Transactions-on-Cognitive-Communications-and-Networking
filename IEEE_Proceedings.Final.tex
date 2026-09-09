@@ -94,7 +94,7 @@ probabilistic models. The tutorial is written for a wireless engineer
 rather than a machine learning specialist, and, as such, we focus on
 orthogonal frequency-division multiplexing (OFDM) waveforms for which we
 identify the properties and the shape of the tools we must adapt to enhance the
-sensing algorithms capable of predicting. Third, we present a complete
+sensing algorithms capable of prediction. Third, we present a complete
 reference architecture and evaluate it, as a case study, on an IEEE 802.11ax
 set of 30 simulated indoor channel realizations and on over-the-air
 recordings from software-defined radios. The architecture predicts the
@@ -148,19 +148,19 @@ allocation more dynamic. Cognitive radio proposed that devices sense
 their environment and adapt \cite{Mitola1999, Haykin2005}; regulators
 built frameworks, of which the three-tier Citizens Broadband Radio
 Service is the most fully realized, where a database or spectrum
-access systems grants and revokes rights on demand \cite{FCC2015CBRS};
+access systems grant and revoke rights on demand \cite{FCC2015CBRS};
 and national spectrum policies have increasingly considered sharing rather
 than clearing as the primary route to additional capacity
 \cite{NSS2023}.
 These are real advances, which also share a common temporal characteristic:
-they operate within the spectrum bands \red{\st{an access system grants} granted by an access system}, where these
-bands \red{\st{remain} are assigned to be} unavailable for seconds, minutes, or longer (see Fig.~\ref{fig_0}).
+they operate within the spectrum bands granted by an access system, where these
+bands are indicated as unavailable for seconds, minutes, or longer (see Fig.~\ref{fig_0}).
 
 %%----------------------------------------------------------------------------------SUBSECTION INTRO-A
 \subsection{\textbf{The Granularity Gap}}
 The traffic that actually occupies a band does not always correlate with the
 previously mentioned timescale.
-In an IEEE 802.11ax network, the atomic unit of transmission
+In an IEEE802.11ax network, the atomic unit of transmission
 is an OFDM symbol which lasts about 13~$\mu$s, and the multi-user
 extension of OFDM, OFDMA, subdivides the band into resource units that
 are assigned and released packet by packet. A station that has been granted an
@@ -195,7 +195,7 @@ In the anticipatory arrangement, the end of one transmission
 and the onset of the next are predicted before they occur, and the
 reallocation is prepared in advance. The distinction is not a matter of
 efficiency at the margin: it determines whether a heterogeneous
-device---a radar return pulse, a satellite uplink or a sensor report---can occupy
+device---a radar return pulse, a satellite up-link or a sensor report---can occupy
 a vacant sub-block at all, or must wait for the entire band to be
 released.
 
@@ -204,16 +204,16 @@ released.
 \centering
 \includegraphics[width=6.5in]{Fig/fig_real.pdf}%
 \caption{Comparison between the conventional spectrum allocation system and the
-proposed system utilizing a diffusion model for time-domain signal prediction.
-\red{\st{On the left, various base stations (BS1, BS2, BS3)and} The top section shows various devices (including primary
+proposed system utilizing a diffusion model for time-domain signal prediction. 
+The top section shows various devices (including primary
 users PU1 and PU2 and secondary users SU1 and SU2) communicating via cell tower and satellite links.}
 The middle section illustrates the conventional system, where spectrum allocation waits
 for ongoing communications (e.g., PU1, SU1) to conclude before reallocating spectrum,
-resulting in inefficiencies. In contrast, the \red{\st{right} red} section shows the proposed system,
+resulting in inefficiencies. In contrast, the section shows the proposed system,
 in which the diffusion model predicts the end of current communications and the start
 of new ones (PU2, SU2), enabling dynamic reallocation of spectrum resources.
 This proactive reallocation enhances spectrum utilization by reducing waiting times
-and optimizing the allocation phase.}
+and optimizing the allocation phase.
 \label{fig_real}
 \end{figure*}
 %==============================================================================
@@ -740,7 +740,23 @@ Section~V attempts.
 
 %----------------------------------------------------------------------------------SUBSECTION III-G
 \subsection{\textbf{Spectrum Prediction Evaluation Metrics}}
-\red{Spectrum occupancy prediction using AI/ML is typically framed as a binary classification problem: \textit{Is a channel idle or occupied?}. In literature, a model's performance is most commonly assessed using a mix of well-established metrics from the AI/ML field like accuracy, F1 score, and area under the ROC curve (AUC). The F1 score, defined as the harmonic mean of precision and recall, is useful for assessing spectrum prediction methods under class imbalance, such as scenarios where spectrum occupancy is infrequent relative to idle periods. A high F1 score reflects that a sensing or prediction strategy performs well both at detecting occupied bands (recall) and at avoiding false alarms (precision). AUC complements F1 as a threshold-independent measure that summarizes a model's overall ability to separate occupied from idle states across all decision thresholds, rather than at a single fixed operating point. These two metrics accompany accuracy in literature since accuracy alone can be misleading on class-imbalanced dataset. However, we argue that these metrics become misleading as we go down the timescale ladder to predict occupancy at the granularity of frames. Section VI addresses this.}
+Spectrum occupancy prediction using AI/ML is typically framed as a binary 
+classification problem: \textit{Is a channel idle or occupied?}. In 
+the literature, a model's performance is most commonly assessed using 
+a mix of well-established metrics from the AI/ML field, such as accuracy, 
+F1 score, and area under the ROC curve (AUC). The F1 score, defined as 
+the harmonic mean of precision and recall, is useful for assessing spectrum 
+prediction methods under class imbalance, such as scenarios where spectrum 
+occupancy is infrequent relative to idle periods. A high F1 score reflects 
+that a sensing or prediction strategy performs well both at 
+detecting occupied bands (recall) and at avoiding false alarms (precision). 
+AUC complements F1 as a threshold-independent measure that summarizes a 
+model's overall ability to separate occupied from idle states across 
+all decision thresholds, rather than at a single fixed operating point. 
+These two metrics accompany accuracy in the literature since accuracy 
+alone can be misleading on class-imbalanced datasets. However, we argue 
+that these metrics become misleading as we go down the timescale ladder 
+to predict occupancy at the granularity of frames. Section VI addresses this.
 
 %========================================================================================================= SECTION IV
 \section{\textbf{Foundations: Representation Learning and Diffusion Models for RF Waveforms}}
@@ -859,17 +875,17 @@ environment-agnostic structure, where the traffic and the allocation dynamics
  are actually shared.
 
 %----------------------------------------------------------------------------------SUBSECTION IV-C
-\subsection{\textbf{Denoising Diffusion Probabilistic Models \red{(DDPM)}}}
+\subsection{\textbf{Denoising Diffusion Probabilistic Models (DDPM)}}
 Diffusion models \cite{SohlDickstein2015, Ho2020} generate samples 
 by learning to invert a fixed noising process.
-when using these models for a synthetic radar waveform, 
-the are two alternatives that are faced: either coherent processing to 
+When using these models for a synthetic radar waveform, 
+there are two alternatives that are faced: either coherent processing to 
 preserve phase information at the cost of high stochastic noise or
 non-coherent processing at the cost of reducing radar resolution.
- Relative to these two alternatives a wireless reader is most likely to
+ Relative to these two alternatives, a wireless reader is most likely to
 have encountered, stable variational autoencoders
 \cite{Kingma2014} tend to produce over-smoothed samples,
-leading to failure mode or generative
+leading to failure modes in generative
 adversarial networks \cite{Goodfellow2014} that produce sharp samples but are
 unstable to train and are prone to mode collapse, which for a predictor of a
 multimodal future is disqualifying.
@@ -1099,7 +1115,7 @@ The final stage of the architecture maps a generated time-domain waveform to
 frequency-domain occupancy. This is a per-frame problem: whether a sub-block is
 occupied in a given frame is determined by the content of that frame alone. The
 evidence is therefore local in time and stationary across frames, which is
-precisely the inductive bias a convolutional stack encodes by construction
+precisely the inductive bias that a convolutional stack encodes by construction
 through weight sharing and restricted support. Attention imposes no such prior;
 it can represent the same mapping, but must learn locality and shift covariance
 from data, and does so less sample-efficiently at the dataset sizes considered
@@ -1114,18 +1130,18 @@ Poisson arrival process, with
 P(\mathrm{Arrivals} = n) = \frac{e^{-\lambda t}(\lambda t)^n}{n!},
 \label{eq:poisson}
 \end{equation}
-where $t$ is the time in seconds, $\lambda$ is the mean arrival rate and $n$ the
+where $t$ is the time in seconds, $\lambda$ is the mean arrival rate, and $n$ the
 number of arrivals \cite{Baker}.
 Given the history up to the present frame, the number and
 timing of arrivals over the next 32 frames is genuinely random. There is
-no function of the history that returns the correct future; there is only
+no function of history that returns the correct future; there is only
 a distribution over futures.
 A generative model represents that
-distribution, and the spread of its samples is the honest expression of
+distribution, and the spread of its samples is an honest expression of
 what is knowable.
 This is the conceptual justification for the entire
-architecture, and it also sets the ceiling on achievable performance:
-no predictor can do better than the entropy \red{\st{of} that} the arrival process
+architecture and also sets the ceiling on achievable performance:
+no predictor can do better than the entropy that the arrival process
 permits.
 
 %======================================================================= FIG. 4
@@ -1215,8 +1231,11 @@ The temporal-to-frequency (T2F) classifier
 developed in this work maps each generated 1024-sample
 OFDM-symbol interval
 to the occupancy of eight 10~MHz analysis sub-blocks. It is a 1D
-convolutional \red{neural} network \red{(CNN)} of 17M parameters, pretrained on ground-truth
-waveforms. \red{In Section VII.D, we demonstrate that using the classical CNN for the T2F stage outperforms more modern and advanced attention-based models.}
+convolutional neural network (CNN) of 17M parameters, 
+pretrained on ground-truth
+waveforms. In Section VII.D, we demonstrate that using the 
+classical CNN for the T2F stage outperforms more modern and advanced 
+attention-based models.
 
 Classifying sub-blocks rather than individual subcarriers is a
 deliberate simplification that aligns the output with how spectrum is
@@ -1249,7 +1268,7 @@ Section~VII-D quantifies the result.
 After the stages are trained separately, the encoder and T2F classifier
 are fine-tuned jointly with the diffusion parameters frozen, to reduce
 the T2F model's sensitivity to the discrepancy between a sampled future
-and the realized one. A weighted cross-entropy focuses gradient on
+and the realized one. A weighted cross-entropy focuses on gradient
 errors:
 \begin{align}
 L =\; & 0.1 \times \Id\!\left(\hat{S} = S\right) \times
@@ -1305,7 +1324,7 @@ Total           & 0.2B & --- \\
 We interrupt the presentation of results to argue a methodological point
 that we believe applies to the field generally and not only to the
 architecture above. The argument is that the default evaluation practice
-in spectrum prediction---compute AUC, accuracy, or F1 \red{(Section III.G)} over randomly drawn
+in spectrum prediction---compute AUC, accuracy, or F1 (Section III.G) over randomly drawn
 evaluation windows---becomes uninformative and can become actively
 misleading as prediction horizons shorten toward the frame scale. We set
 out the reasoning, the corrections we adopt, and their cost in reported
@@ -1342,7 +1361,7 @@ windows.
 This is a demanding protocol, and it should be. It also requires
 explicit reporting of the base rate: the occupied-class base rate of
 these windows is 0.690, which is the no-skill floor for average
-precision \red{(AP)}. An AP of 0.90 against a base rate of 0.69 is a modest result,
+precision (AP). An AP of 0.90 against a base rate of 0.69 is a modest result,
 and reporting AP without the base rate invites it to be read as a strong
 one.
 
@@ -1406,8 +1425,16 @@ them as ordered would misrepresent the evidence.
 \label{sec:corpus}
 The utilized dataset simulates a dynamically changing indoor environment in which
 multiple users share a fixed channel through a single transmitter. 
-For the appropriate dataset partitioning, we considered the relationship among simulated environments as shown  
-\red{in \st{on Fig. ~\ref{fig:Figure_Data_Part}} Fig. \ref{fig:fig_sysdiag}}. Independent waveform realizations, payload partitions, component-specific training sets, validation sets, and final evaluation sets. Environments and payload sequences assigned to final testing are excluded from model training and hyperparameter selection. The transition-conditioned set is derived only after the final test split is fixed.The
+For the appropriate dataset partitioning, we considered the relationship a
+mong simulated environments as shown  
+in Fig. \ref{fig:fig_sysdiag}. 
+Independent waveform realizations, payload partitions, 
+component-specific training sets, validation sets, 
+and final evaluation sets. Environments and payload 
+sequences assigned to final testing are excluded 
+from model training and hyperparameter selection. 
+The transition-conditioned set is derived only 
+after the final test split is fixed.The
 resource is 5~s of transmission over 80~MHz centered at
 $f_c = 5.25$~GHz. Packet and resource allocation follow IEEE 802.11ax
 (High Efficiency, Wi-Fi 6), whose multi-user OFDMA extension divides the
@@ -1431,8 +1458,13 @@ occupancy.}
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=6in]{Fig/Figure_Data_Part.pdf}
-\caption{The dataset partitioning was based on the relationship among simulated environments,
-independent waveform realizations, payload partitions, component-specific training sets, and final evaluation sets. Environments and data sequences assigned to the final testing were excluded from model training and hyperparameter selection.}
+\caption{The dataset partitioning was based on the 
+relationship among simulated environments,
+independent waveform realizations, payload partitions, 
+component-specific training sets, and final evaluation sets. 
+Environments and data sequences assigned to the final 
+testing were excluded from model training and hyperparameter 
+selection.}
 \label{fig:Figure_Data_Part}
 \end{figure*}
 
@@ -1740,8 +1772,8 @@ Finally, at the 1\% collision operating point, sensed persistence and
 fusion both identify 12.8\% of vacant sub-blocks against 25.9\% for the
 oracle. The AUC gain from fusion does not translate into recovered
 spectrum at this operating point---a gap invisible in the ranking
-metrics and, we would argue, the single most important number in \red{\st{the
-table}} \red{Fig. \ref{fig:Figure_Operation_vacancy.pdf}} for anyone considering deployment.
+metrics and, we would argue, the single most important number in  
+\ref{fig:Figure_Operation_vacancy.pdf} for anyone considering deployment.
 
 %==================================================================== TABLE VI
 \begin{table}[!t]
@@ -1770,8 +1802,17 @@ proposed fusion (AUC 0.8844).}
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=6in]{Fig/Figure_Literature.pdf}
-\caption{Operating-regime map of representative spectrum-occupancy prediction methods.The horizontal axis shows the prediction interval per forecast step on a logarithmic scale, while the vertical axis identifies the input representation. Marker shape distinguishes deterministic point prediction from stochastic or generative prediction, and marker color denotes the frequency granularity of the predicted output. The proposed method operates in a distinct regime characterized by raw-waveform input, symbol-scale prediction, stochastic generation, and standardized sub-block occupancy. The studies are summarized in Table VII; their datasets and evaluation protocols differ, so the figure compares operating regimes rather than predictive performance.
-}
+\caption{Operating-regime map of representative spectrum-occupancy 
+prediction methods.The horizontal axis shows the prediction interval 
+per forecast step on a logarithmic scale, while the vertical axis 
+identifies the input representation. Marker shape distinguishes 
+deterministic point prediction from stochastic or generative prediction, 
+and marker color denotes the frequency granularity of the predicted output. 
+The proposed method operates in a distinct regime characterized by 
+raw-waveform input, symbol-scale prediction, stochastic generation, 
+and standardized sub-block occupancy. The studies are summarized in 
+Table VII; their datasets and evaluation protocols differ, so the 
+figure compares operating regimes rather than predictive performance.}
 \label{fig:Figure_Literature.pdf}
 \end{figure*}
 
@@ -1809,7 +1850,8 @@ Cumulative occupancy probability across all 20 outputs at each step from
 
 %----------------------------------------------------------------------------------SUBSUBSECTION VII-D-5
 \subsubsection{\textbf{Position relative to prior work}}
-Table~\ref{tab:comparison} \red{and Fig. \ref{fig:Figure_Literature.pdf}} places the architecture against representative
+Table~\ref{tab:comparison} and Fig.\ref{fig:Figure_Literature.pdf} 
+places the architecture against representative
 prior methods. The comparison is drawn from reported results on different
 datasets and is therefore indicative of operating regime rather than a
 controlled benchmark---an unavoidable limitation that Section~IX-E
@@ -1936,8 +1978,9 @@ owing to computer memory limits. Channel test cases were created by varying
 USRP separation (2--4\,ft), placing metallic and dielectric objects and fans
 around the radios, and in one case inserting a plywood barrier. The setup sat in
 a typical laboratory environment including interference from nearby Wi-Fi
-devices and routers. \red{To control dataset quality} successful reception required an error vector magnitude \red{(EVM)}
-below $-10$\,dB; \red{for comparison} typical packets measured \red{EVM of} $-30$\,dB.
+devices and routers. To control dataset quality successful reception 
+required an error vector magnitude (EVM)
+below $-10$\,dB; for comparison typical packets measured EVM of $-30$\,dB.
 
 
 
@@ -1946,7 +1989,7 @@ below $-10$\,dB; \red{for comparison} typical packets measured \red{EVM of} $-30
 \centering
 \includegraphics[width=3.4in]{Fig/measurement_data.pdf}
 % Alternative source file for this figure: fig_usrp
-\caption{\red{A representative measurement using the setup in Fig. \ref{fig:usrp}: (a) Received IQ samples from a full $\approx$ 1200 Wi-Fi packets. Any idle-time between packets is discarded. (b and c) IQ samples from two narrower time slots within the entire reception window. (d) Baseband spectrogram corresponding to IQ samples in (b). (e) Baseband spectrogram corresponding to IQ samples in (c). Packets corresponding to the time windows in (b) and (c) are specifically chosen to show a change in spectrum occupancy. These transitions are rare events and a randomly chosen time window is likely to not have a transition.}}
+\caption{A representative measurement using the setup in Fig. \ref{fig:usrp}: (a) Received IQ samples from a full $\approx$ 1200 Wi-Fi packets. Any idle-time between packets is discarded. (b and c) IQ samples from two narrower time slots within the entire reception window. (d) Baseband spectrogram corresponding to IQ samples in (b). (e) Baseband spectrogram corresponding to IQ samples in (c). Packets corresponding to the time windows in (b) and (c) are specifically chosen to show a change in spectrum occupancy. These transitions are rare events and a randomly chosen time window is likely to not have a transition.}
 \label{fig:usrp_data}
 \end{figure}
 
@@ -1980,7 +2023,10 @@ Section~\ref{sec:system_results}. Given the aggregation result of
 Section~\ref{sec:aggregation}---where fixed-threshold voting cost 0.0345
 AUC---the ensemble-mean variant is the better-calibrated choice, and we note the
 difference so the two sets of numbers are not read as products of an identical
-pipeline. Table~\ref{tab:ota} reports the results. Fig.~\ref{fig:occupancy_measured} shows the resulting prediction on 512 consecutive received packets for the fusion configuration; its errors are confined to the prediction window immediately following each occupancy change.
+pipeline. Table~\ref{tab:ota} reports the results. Fig.~\ref{fig:occupancy_measured} 
+shows the resulting prediction on 512 consecutive received packets for the 
+fusion configuration; its errors are confined to the prediction window immediately 
+following each occupancy change.
 
 %==================================================================== TABLE IX
 \begin{table}[!t]
@@ -2005,7 +2051,8 @@ Normalized FDE                         & 0.059 \\
 \subsubsection{\textbf{Scope}}
 Two qualifications bound this result and should be read as part of it. The
 packet-window sampler draws training and evaluation windows from the same pool,
-so these figures characterize in-sample fit on the recorded dataset rather than \red{performance on unseen, out-of-sample data}; generalization is assessed instead on the simulated
+so these figures characterize in-sample fit on the recorded dataset rather than 
+performance on unseen, out-of-sample data; generalization is assessed instead on the simulated
 corpus in Section~\ref{sec:zeroshot}. And no ROC analysis is reported for this
 dataset. Within that scope, the experiment establishes that the complete
 framework---contrastive encoder, conditional diffusion model, and T2F
