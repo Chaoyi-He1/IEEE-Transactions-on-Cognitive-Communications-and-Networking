@@ -1980,7 +1980,7 @@ Section~\ref{sec:system_results}. Given the aggregation result of
 Section~\ref{sec:aggregation}---where fixed-threshold voting cost 0.0345
 AUC---the ensemble-mean variant is the better-calibrated choice, and we note the
 difference so the two sets of numbers are not read as products of an identical
-pipeline. Table~\ref{tab:ota} reports the results.
+pipeline. Table~\ref{tab:ota} reports the results. Fig.~\ref{fig:occupancy_measured} shows the resulting prediction on 512 consecutive received packets for the fusion configuration; its errors are confined to the prediction window immediately following each occupancy change.
 
 %==================================================================== TABLE IX
 \begin{table}[!t]
@@ -1993,7 +1993,7 @@ pipeline. Table~\ref{tab:ota} reports the results.
 \textbf{Metric} & \textbf{Value} \\
 \midrule
 Sub-block occupancy accuracy (epoch 1) & 0.772 \\
-Sub-block occupancy accuracy (best)    & 0.828 \\. Fig.~\ref{fig:occupancy_measured} shows the resulting prediction on 512 consecutive received packets for the fusion configuration; its errors are confined to the prediction window immediately following each occupancy change.
+Sub-block occupancy accuracy (best)    & 0.828 \\
 F1 score                               & 0.899 \\
 Normalized ADE                         & 0.059 \\
 Normalized FDE                         & 0.059 \\
