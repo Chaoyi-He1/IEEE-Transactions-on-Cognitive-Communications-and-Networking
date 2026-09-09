@@ -160,7 +160,7 @@ bands are indicated as unavailable for seconds, minutes, or longer (see Fig.~\re
 \subsection{\textbf{The Granularity Gap}}
 The traffic that actually occupies a band does not always correlate with the
 previously mentioned timescale.
-In an IEEE802.11ax network, the atomic unit of transmission
+In an IEEE 802.11ax network, the atomic unit of transmission
 is an OFDM symbol which lasts about 13~$\mu$s, and the multi-user
 extension of OFDM, OFDMA, subdivides the band into resource units that
 are assigned and released packet by packet. A station that has been granted an
@@ -173,8 +173,8 @@ not include them.
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{Fig/fig0_congested_urban_spectrum.pdf}
-\caption{The gap this paper addresses. Above: an 80~MHz band - eight 10 MHz 
-sub-blocks x 48 OFDM-symbol intervals (614.4 $\mu$s, excluding guard intervals),
+\caption{The gap this paper addresses. Above: an 80~MHz band---eight 10~MHz
+sub-blocks $\times$ 48 OFDM-symbol intervals (614.4~$\mu$s, excluding guard intervals),
 shaded by received power; the column at right gives the occupancy a single sensing
 decision reports over the same window. Below: the environment that produces
 this pattern, in which overlapping macro-cell, small-cell, aerial and ground
@@ -206,14 +206,14 @@ released.
 \caption{Comparison between the conventional spectrum allocation system and the
 proposed system utilizing a diffusion model for time-domain signal prediction. 
 The top section shows various devices (including primary
-users PU1 and PU2 and secondary users SU1 and SU2) communicating via cell tower and satellite links.}
+users PU1 and PU2 and secondary users SU1 and SU2) communicating via cell tower and satellite links.
 The middle section illustrates the conventional system, where spectrum allocation waits
 for ongoing communications (e.g., PU1, SU1) to conclude before reallocating spectrum,
-resulting in inefficiencies. In contrast, the section shows the proposed system,
+resulting in inefficiencies. In contrast, the bottom section shows the proposed system,
 in which the diffusion model predicts the end of current communications and the start
 of new ones (PU2, SU2), enabling dynamic reallocation of spectrum resources.
 This proactive reallocation enhances spectrum utilization by reducing waiting times
-and optimizing the allocation phase.
+and optimizing the allocation phase.}
 \label{fig_real}
 \end{figure*}
 %==============================================================================
@@ -229,16 +229,16 @@ pressure, with a strong dependence on band, direction, location, and time of day
 A common interpretation of these measurements is that there is
 headroom.
 Contrary to that, the interpretation we have adopted here is stronger:
-\emph{"much of the headroom is invisible not because it is small
-but because it is short-lived and narrow, and no operational system resolves it"}.
+\emph{``much of the headroom is invisible not because it is small
+but because it is short-lived and narrow, and no operational system resolves it''}.
 Throughout this paper, one prediction step corresponds to the 1024-sample useful 
-portion of an IEEE802.11ax 
+portion of an IEEE 802.11ax 
 OFDM symbol sampled at 80 MS/s, giving a duration of 12.8 $\mu$s. 
 The guard interval is removed before the model input is formed. 
 We therefore use "OFDM symbol" for this unit and reserve 
 "frame" and "packet" for PHY- or MAC-level structures 
 containing one or more OFDM symbols. The 32-step prediction 
-horizon is consequently 409.6$\mu$s
+horizon is consequently 409.6~$\mu$s.
 
 %----------------------------------------------------------------------------------SUBSECTION INTRO-B
 \subsection{\textbf{Sensing, Prediction, Anticipation}}
@@ -493,7 +493,7 @@ $10^{-1}$--$1$~s & Occupancy dwell        & User session \\
 One structural characteristic of the occupant signal is easily overlooked and
 materially affects how results should be assessed, as explained below.
 Today's standards constrain allocation to be contiguous and quantized 
-\red{\st{\i.e.} i.e.}, in 802.11ax, the band is divided into 20~MHz increments, 
+i.e., in 802.11ax, the band is divided into 20~MHz increments, 
 so the eight 10~MHz occupancy indicators of an 80~MHz 
 channel are not eight independent binary variables.
 They form a small set of nested states, and the prediction task is better
@@ -855,9 +855,9 @@ density ratio in (\ref{eq:density_ratio}), and minimizing
 (\ref{eq:infonce}) maximizes a lower bound on the mutual information
 $I(x_{t+k}; c_t)$ \cite{Oord2018}.
 It is worth being precise about this point, since it is frequently 
-overstated in applied work: "the objective
+overstated in applied work: ``the objective
 optimizes a bound, not the mutual information itself, and the tightness
-of that bound depends on the number of negatives."
+of that bound depends on the number of negatives.''
 
 The choice of negative samples is a consequential design decision in applying
 CPC to spectrum data.
@@ -1181,7 +1181,7 @@ overall flow.
 \caption{Stage interfaces and dimensions. The latent space extractor compresses
 the observed history to a 128-dimensional context vector $\mathbf{z}_t$; the
 conditional diffusion model samples $T_{\mathrm{pred}}=32$ future frames
-conditioned on \red{\st{$\mathbf{z}_t$} $z_t$}; the temporal-to-frequency classifier maps each
+conditioned on $z_t$; the temporal-to-frequency classifier maps each
 generated frame to occupancy over eight 10~MHz sub-blocks. Interfaces are
 fixed, so individual stages may be substituted.}
 \label{fig:Fig_arch.pipeline}
@@ -1434,7 +1434,7 @@ and final evaluation sets. Environments and payload
 sequences assigned to final testing are excluded 
 from model training and hyperparameter selection. 
 The transition-conditioned set is derived only 
-after the final test split is fixed.The
+after the final test split is fixed. The
 resource is 5~s of transmission over 80~MHz centered at
 $f_c = 5.25$~GHz. Packet and resource allocation follow IEEE 802.11ax
 (High Efficiency, Wi-Fi 6), whose multi-user OFDMA extension divides the
@@ -1612,8 +1612,6 @@ same regime at a fraction of the cost.
 \hfil
 \subfloat[]{\includegraphics[width=2.2in]{Fig/untitled.png}%
 \label{fig_res6}}
-% NOTE: source file was named "Testing errors.png"; spaces in graphics filenames
-% break \includegraphics. Rename to Testing errors.png (as above) or load grffile.
 % Alternative source file for this whole figure: fig_validation
 \caption{Validation results. (a) Encoder InfoNCE loss for different
 history lengths. (b) Encoder loss for different latent dimensions. (c)
@@ -1773,7 +1771,7 @@ fusion both identify 12.8\% of vacant sub-blocks against 25.9\% for the
 oracle. The AUC gain from fusion does not translate into recovered
 spectrum at this operating point---a gap invisible in the ranking
 metrics and, we would argue, the single most important number in  
-\ref{fig:Figure_Operation_vacancy.pdf} for anyone considering deployment.
+Fig.~\ref{fig:Figure_Operation_vacancy.pdf} for anyone considering deployment.
 
 %==================================================================== TABLE VI
 \begin{table}[!t]
@@ -1850,8 +1848,8 @@ Cumulative occupancy probability across all 20 outputs at each step from
 
 %----------------------------------------------------------------------------------SUBSUBSECTION VII-D-5
 \subsubsection{\textbf{Position relative to prior work}}
-Table~\ref{tab:comparison} and Fig.\ref{fig:Figure_Literature.pdf} 
-places the architecture against representative
+Table~\ref{tab:comparison} and Fig.~\ref{fig:Figure_Literature.pdf}
+place the architecture against representative
 prior methods. The comparison is drawn from reported results on different
 datasets and is therefore indicative of operating regime rather than a
 controlled benchmark---an unavoidable limitation that Section~IX-E
@@ -2418,9 +2416,9 @@ assistance with a graph/figure.
 
 \bibitem{Haykin2005} S.~Haykin, ``Cognitive radio: Brain-empowered wireless communications,'' \emph{IEEE J. Sel. Areas Commun.}, vol.~23, no.~2, pp.~201--220, 2005.
 
-\bibitem{FCC2015CBRS} Federal Communications Commission, ``Report and order and second further notice of proposed rulemaking,'' GN Docket No.~12-354, 2015. % VERIFY citation details
+\bibitem{FCC2015CBRS} Federal Communications Commission, ``Amendment of the Commission's rules with regard to commercial operations in the 3550--3650 MHz band: Report and order and second further notice of proposed rulemaking,'' GN Docket No.~12-354, FCC 15-47, Apr. 2015.
 
-\bibitem{NSS2023} National Telecommunications and Information Administration, ``National spectrum strategy,'' U.S. Dept.\ of Commerce, 2023. % VERIFY citation details
+\bibitem{NSS2023} National Telecommunications and Information Administration, ``National spectrum strategy,'' U.S. Dept.\ of Commerce, Nov. 2023.
 
 \bibitem{Chen2016} Y.~Chen and H.~Oh, ``A survey of measurement-based spectrum occupancy modeling for cognitive radios,'' \emph{IEEE Commun. Surveys Tuts.}, vol.~18, pp.~848--859, 2016.
 
