@@ -481,8 +481,8 @@ Years            & Band allocation        & Regulatory proceeding \\
 Hours--days      & Coordination           & Database, coexistence \\
 Seconds--min     & Grant assignment       & SAS, scheduler, handover \\
 $10^{-1}$--$1$~s & Occupancy dwell        & User session \\
-$1$~$ms          & Packet/TXOP            & MAC contention \\
-$10-16$~$\mu$s   & OFDM symbol            & PHY \\
+1~ms             & Packet/TXOP            & MAC contention \\
+10--16~$\mu$s    & OFDM symbol            & PHY \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1177,7 +1177,7 @@ overall flow.
 %======================================================================= FIG. 5
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=5.5in]{Fig/Fig_arch.pipeline}
+\includegraphics[width=5.5in]{Fig/Fig_arch.pipeline.pdf}
 \caption{Stage interfaces and dimensions. The latent space extractor compresses
 the observed history to a 128-dimensional context vector $\mathbf{z}_t$; the
 conditional diffusion model samples $T_{\mathrm{pred}}=32$ future frames
@@ -1220,7 +1220,7 @@ $Y = \{y_t \in \mathbb{R}^d \mid t = 1, \ldots, T_{\mathrm{pred}}\}
 where $d$ is the number of samples per frame. The reverse process is
 (\ref{eq:reverse}) and training follows (\ref{eq:simple_loss}). The
 deployed configuration uses $T_{\mathrm{pred}} = 32$ OFDM symbol intervals, or
- 409.6~\uswheneach interval contains 1024-sample useful symbol at 80 MHz.
+ 409.6~\us{} when each interval contains a 1024-sample useful symbol at 80~MHz.
 This horizon was set by available GPU memory
 rather than by any observed degradation in accuracy, a point we return
 to in Section~VII-C.
@@ -1569,7 +1569,7 @@ per 10~MHz sub-block, taking the value 1 when that sub-block is occupied.
 Sixty data files are produced, 30 for training and 30 for validation.
 
 %-----------------------------------------------------------------------------------------SUBSECTION VII-B
-\subsection{\textfb{Representation Learning}}
+\subsection{\textbf{Representation Learning}}
 Fig.~\ref{fig:validation}a--c reports encoder validation, with negative samples
 drawn from a heterogeneous waveform pool that deliberately excludes samples
 closely related to the positive sample's immediate environment. Three findings
