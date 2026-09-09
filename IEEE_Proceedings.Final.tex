@@ -1998,7 +1998,7 @@ below $-10$\,dB; for comparison typical packets measured EVM of $-30$\,dB.
 \begin{figure}[!tbp]
 \centering
 \includegraphics[width=3.4in]{Fig/occupancy_pred_measured.pdf}
-\caption{Predicted sub-band occupancy on 512 consecutive received packets (Test~1) for the fusion configuration: the 20-sample ensemble confidence of the pipeline fused (geometric mean) with the T2F classifier's estimate from the 32 most recent packets, thresholded at 0.5. (a) Ground truth; (b) prediction; (c) error classes. Decision accuracy 0.94 (T2F sensing alone 0.93; generative pipeline alone 0.73); errors are confined to the prediction window immediately following each occupancy change.}
+\caption{Predicted sub-band occupancy on 512 consecutive received packets (Test~1) for the fusion configuration described in the text: (a) ground truth, (b) prediction, (c) errors. Decision accuracy 0.94.}
 \label{fig:occupancy_measured}
 \end{figure}
 
@@ -2023,10 +2023,7 @@ Section~\ref{sec:system_results}. Given the aggregation result of
 Section~\ref{sec:aggregation}---where fixed-threshold voting cost 0.0345
 AUC---the ensemble-mean variant is the better-calibrated choice, and we note the
 difference so the two sets of numbers are not read as products of an identical
-pipeline. Table~\ref{tab:ota} reports the results. Fig.~\ref{fig:occupancy_measured} 
-shows the resulting prediction on 512 consecutive received packets for the 
-fusion configuration; its errors are confined to the prediction window immediately 
-following each occupancy change.
+pipeline. Table~\ref{tab:ota} reports the results. For the visualization of Fig.~ef{fig:occupancy_measured} we apply the fusion configuration of Section~ef{sec:system_results} to the measured stream, with the sensed estimate taken from the 32 most recent packets rather than the full 128-packet history: at the packet level, occupancy changes only every few hundred packets, and averaging the sensed estimate over the whole history delays the response to each change by tens of packets. The generative pipeline alone reaches a decision accuracy of 0.73 on this stretch, sensing alone 0.93, and their fusion 0.94, with errors confined to the prediction window immediately following each occupancy change.
 
 %==================================================================== TABLE IX
 \begin{table}[!t]
