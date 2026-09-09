@@ -1951,6 +1951,15 @@ below $-10$\,dB; \red{for comparison} typical packets measured \red{EVM of} $-30
 \end{figure}
 
 
+%-----------------------------------------------------------------------------------FIGURE 16
+\begin{figure}[!tbp]
+\centering
+\includegraphics[width=3.4in]{Fig/occupancy_pred_measured.pdf}
+\caption{Predicted sub-band occupancy on 512 consecutive received packets (Test~1) for the fusion configuration: the 20-sample ensemble confidence of the pipeline fused (geometric mean) with the T2F classifier's estimate from the 32 most recent packets, thresholded at 0.5. (a) Ground truth; (b) prediction; (c) error classes. Decision accuracy 0.94 (T2F sensing alone 0.93; generative pipeline alone 0.73); errors are confined to the prediction window immediately following each occupancy change.}
+\label{fig:occupancy_measured}
+\end{figure}
+
+
 %---------------------------------------------------------------------------------SUBSUBSECTION VII-F-2
 \subsubsection{\textbf{Dataset and retraining}}
 Each packet is stored as complex baseband I/Q at 80\,MHz and annotated with
@@ -1984,7 +1993,7 @@ pipeline. Table~\ref{tab:ota} reports the results.
 \textbf{Metric} & \textbf{Value} \\
 \midrule
 Sub-block occupancy accuracy (epoch 1) & 0.772 \\
-Sub-block occupancy accuracy (best)    & 0.828 \\
+Sub-block occupancy accuracy (best)    & 0.828 \\. Fig.~\ref{fig:occupancy_measured} shows the resulting prediction on 512 consecutive received packets for the fusion configuration; its errors are confined to the prediction window immediately following each occupancy change.
 F1 score                               & 0.899 \\
 Normalized ADE                         & 0.059 \\
 Normalized FDE                         & 0.059 \\
